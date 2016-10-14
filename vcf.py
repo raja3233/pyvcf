@@ -1,3 +1,4 @@
+import re
 def vcfReader(file):
     '''Reads the contact file and returns all text'''
     file_obj = open(file,'r')
@@ -6,16 +7,17 @@ def vcfReader(file):
 
 def vcfParser(text):
     '''Takes Contacts text and return records of contacts'''
-    import re
     recordRE = re.compile(r"BEGIN:VCARD\s(?:.*\s)+?END:VCARD")
     records= recordRE.findall(text)
     contacts ={}
     for record in records:
-        fnRE = re.compile(r'(FN):(.*)')
-        preRE = re.compile(r'(pref):(.*)')
-        nameRecord = fnRE.findall(record)
-        numberRecord = preRE.findall(record)
-        contactName = nameRecord[0][1] if nameRecord else None
-        contactNumber = numberRecord[0][1].replace('\xa0'," ") if numberRecord else None
+        contactName = _fetch_value('FN', record)
+        contactNumber = _fetch_value('pref', record)
         contacts[contactName] = contactNumber
     return contacts
+
+def _fetch_value(key, record):
+    regex = re.compile(r'(%s):(.*)' % (key))
+    resultGroup = regex.findall(record)
+    value = resultGroup[0][1].replace('\xa0'," ") if resultGroup else None
+    return value
