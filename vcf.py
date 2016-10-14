@@ -13,14 +13,9 @@ def vcfParser(text):
     for record in records:
         fnRE = re.compile(r'(FN):(.*)')
         preRE = re.compile(r'(pref):(.*)')
-        contactName = fnRE.findall(record)[0][1]
-        print contactName
-    #     contactNumber = preRE.findall(record)[0][1]
-    #     contacts[contactName] = contactNumber
-    # return contacts
-
-
-contacts_data = vcfReader('/Users/ganesh/Documents/contacts.vcf')
-records = vcfParser(contacts_data)
-print('records inthe contacts are', len(records))
-print(contacts)
+        nameRecord = fnRE.findall(record)
+        numberRecord = preRE.findall(record)
+        contactName = nameRecord[0][1] if nameRecord else None
+        contactNumber = numberRecord[0][1].replace('\xa0'," ") if numberRecord else None
+        contacts[contactName] = contactNumber
+    return contacts
