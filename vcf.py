@@ -7,7 +7,8 @@ def vcfReader(file):
 
 def vcfParser(text):
     '''Takes Contacts text and return records of contacts'''
-    recordRE = re.compile(r"BEGIN:VCARD\s(?:.*\s)+?END:VCARD")
+    #Regular expression for each VCARD
+    recordRE = re.compile(r"BEGIN:VCARD\s(?:.*\s)+?END:VCARD") 
     records= recordRE.findall(text)
     contacts ={}
     for record in records:
@@ -17,6 +18,7 @@ def vcfParser(text):
     return contacts
 
 def _fetch_value(key, record):
+    '''Take the type and return the value of the type'''
     regex = re.compile(r'(%s):(.*)' % (key))
     resultGroup = regex.findall(record)
     value = resultGroup[0][1].replace('\xa0'," ") if resultGroup else None
