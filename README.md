@@ -1,4 +1,3 @@
-#pyvcf module for .vcf files
+# pyvcf  
 
-Reads the .vcf file and returns Contacts as a python dictionary
-Contacts{contactName:contactNumber}
+Reads the .vcf file and returns Contacts as a JSON object {contactName:contactNumber}
